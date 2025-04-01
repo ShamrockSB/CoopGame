@@ -13,8 +13,11 @@ public class PlayerController : MonoBehaviour
     private float jumpHeight = 1.0f;
     [SerializeField]
     private float gravityValue = -9.81f;
+    [SerializeField]
+    private float lookSensitivity = 1.0f;
 
     private Vector2 movementInput = Vector2.zero;
+    private Vector2 lookInput = Vector2.zero;
     private bool jumped = false;
 
     private void Start()
@@ -33,6 +36,11 @@ public class PlayerController : MonoBehaviour
         jumped = context.action.triggered;
         //jumped = context.ReadValue<bool>();
         
+    }
+
+    public void OnLook(InputAction.CallbackContext context)
+    {
+        lookInput = context.ReadValue<Vector2>() * lookSensitivity;
     }
 
     void Update()
@@ -54,5 +62,11 @@ public class PlayerController : MonoBehaviour
 
         playerVelocity.y += gravityValue * Time.deltaTime;
         controller.Move(playerVelocity * Time.deltaTime);
+
+        // Handle looking - you can implement your look logic here
+        // For example, if this controls camera rotation:
+        //transform.Rotate(Vector3.up, lookInput.x);
+        // or if it controls a separate camera:
+        // cameraTransform.rotation *= Quaternion.Euler(-lookInput.y, lookInput.x, 0);
     }
 }
